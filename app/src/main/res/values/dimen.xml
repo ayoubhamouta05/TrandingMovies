@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <dimen name="smallMargin">10dp</dimen>
+    <dimen name="mediumMargin">16dp</dimen>
+    <dimen name="movieImgHeight">248dp</dimen>
+    <dimen name="iconSize">20dp</dimen>
+    <dimen name="mediumIconSize">15dp</dimen>
+    <dimen name="smallIconSize">11dp</dimen>
+    <dimen name="smallTextSize">12sp</dimen>
+    <dimen name="ExtraSmallPadding2">6dp</dimen>
+    <dimen name="ExtraSmallPadding">3dp</dimen>
+    <dimen name="movieCardHeight">190dp</dimen>
+    <dimen name="movieCardWidth">130dp</dimen>
+    <dimen name="mediumPadding1">24dp</dimen>
+    <dimen name="mediumPadding2">30dp</dimen>
+
+    <dimen name="cardTitleSize">18sp</dimen>
+
+</resources>

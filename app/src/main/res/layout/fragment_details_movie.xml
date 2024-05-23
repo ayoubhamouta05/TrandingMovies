@@ -1,0 +1,331 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.fragments.details.DetailsMovieFragment">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/smallMargin"
+        app:cardBackgroundColor="@color/body"
+        app:cardCornerRadius="@dimen/smallTextSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="@dimen/iconSize"
+            android:layout_height="@dimen/iconSize"
+            android:layout_marginHorizontal="@dimen/mediumMargin"
+            android:layout_marginVertical="@dimen/smallMargin"
+            android:rotation="180"
+            android:src="@drawable/ic_arrow_next"
+            app:tint="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginStart="-16dp"
+            android:minHeight="60dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/img_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:keepScreenOn="true"
+                    android:scaleType="centerCrop"
+                    android:src="@color/black" />
+            </androidx.cardview.widget.CardView>
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/details_background"
+        android:elevation="4dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/detailsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/smallMargin"
+                android:layout_marginHorizontal="@dimen/mediumPadding1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/titleTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/mediumMargin"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textColor="@color/text_title"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    tools:text="title" />
+
+
+                <TextView
+                    android:id="@+id/release_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/body"
+                    tools:text="May 22, 2024" />
+
+
+                <TextView
+                    android:id="@+id/genres_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/placeholder"
+                    tools:text="categories" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/ExtraSmallPadding"
+                    android:orientation="horizontal">
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="2dp"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:progressTint="@color/star_color"
+                        android:rating="6.2"
+                        android:stepSize="0.1" />
+
+                    <TextView
+                        android:id="@+id/vote_average"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/smallMargin"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center"
+                        android:textColor="@color/body"
+                        android:textStyle="bold"
+                        tools:text="6.2" />
+
+                    <TextView
+                        android:id="@+id/vote_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/smallMargin"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/placeholder"
+                        tools:text="(627879)" />
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="@dimen/smallMargin"
+                        android:background="@color/black" />
+
+                    <ImageView
+                        android:id="@+id/link_btn"
+                        android:layout_width="@dimen/iconSize"
+                        android:layout_height="@dimen/iconSize"
+                        android:layout_gravity="end"
+                        android:padding="2dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_link" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/placeholder"
+                        android:text="original language : " />
+
+                    <TextView
+                        android:id="@+id/originalLanguage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/body"
+                        tools:text="en" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/placeholder"
+                        android:text="origin countries : " />
+
+                    <TextView
+                        android:id="@+id/originCountries"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/body"
+                        android:text="en" />
+                </LinearLayout>
+
+
+                <!--OverView                -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/mediumPadding2"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:paddingVertical="@dimen/smallIconSize"
+                    android:textColor="@color/text_title"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:text="OverView" />
+
+                <TextView
+                    android:id="@+id/overview_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/text_medium"
+                    tools:text="description" />
+
+
+                <!-- Production                -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/mediumPadding2"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:paddingVertical="@dimen/smallIconSize"
+                    android:textColor="@color/text_title"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:text="Production" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/production_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                <!--Spoken Language                -->
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/placeholder"
+                        android:text="Spoken Languages : " />
+
+                    <TextView
+                        android:id="@+id/spokenLanguages"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/body"
+                        tools:text="en" />
+                </LinearLayout>
+
+                <!--Collection                -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/mediumPadding2"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:paddingVertical="@dimen/smallIconSize"
+                    android:textColor="@color/text_title"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:text="Belong To Collection" />
+
+                <TextView
+                    android:id="@+id/collection_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/body"
+                    android:gravity="center"
+                    tools:text="collection name" />
+
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="20dp">
+                    <ImageView
+                        android:id="@+id/collection_img"
+                        android:layout_width="@dimen/movieCardHeight"
+                        android:layout_height="@dimen/movieCardWidth"
+                        android:scaleType="centerCrop"
+                        />
+
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
