@@ -11,4 +11,5 @@
     <color name="placeholder">#DDDDDD</color>
     <color name="shimmer">#414243</color>
     <color name="transparent">#00000000</color>
+    <color name="background">#E9000000</color>
 </resources>

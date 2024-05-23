@@ -4,13 +4,12 @@ import com.youppix.trandingmovies.data.remote.MoviesApi
 import com.youppix.trandingmovies.data.remote.dto.MovieDetailsResponse
 import com.youppix.trandingmovies.data.remote.dto.MoviesResponse
 import com.youppix.trandingmovies.domain.repository.MoviesRepository
-import retrofit2.Response
 
 class MoviesRepositoryImpl(
     private val moviesApi :MoviesApi
 )  : MoviesRepository{
-    override suspend fun getTrendingMovies(page : Int): Response<MoviesResponse> = moviesApi.getTrendingMovies(page)
+    override suspend fun getTrendingMovies(page : Int): MoviesResponse = moviesApi.getTrendingMovies(page)
 
 
-    override suspend fun getMovieById(movieId : Int): Response<MovieDetailsResponse> = moviesApi.getMovieById(movieId)
+    override suspend fun getMovieById(movieId : Int): MovieDetailsResponse = moviesApi.getMovieById(movieId)
 }

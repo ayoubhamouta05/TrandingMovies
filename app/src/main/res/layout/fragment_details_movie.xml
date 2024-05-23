@@ -10,7 +10,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/smallMargin"
-        app:cardBackgroundColor="@color/body"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/text_title"
         app:cardCornerRadius="@dimen/smallTextSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -29,20 +32,21 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@drawable/trending_img_shape">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_marginStart="-16dp"
             android:minHeight="60dp"
+            android:background="@drawable/trending_img_shape"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/img_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/black"
+                android:clickable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -53,7 +57,7 @@
                     android:layout_height="match_parent"
                     android:keepScreenOn="true"
                     android:scaleType="centerCrop"
-                    android:src="@color/black" />
+                     />
             </androidx.cardview.widget.CardView>
 
 
@@ -172,6 +176,9 @@
                         android:layout_height="@dimen/iconSize"
                         android:layout_gravity="end"
                         android:padding="2dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_link" />
 
@@ -266,6 +273,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/ExtraSmallPadding"
                     android:orientation="horizontal">
 
                     <TextView
@@ -300,6 +308,7 @@
                     android:id="@+id/collection_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/ExtraSmallPadding"
                     android:fontFamily="@font/poppins_regular"
                     android:textColor="@color/body"
                     android:gravity="center"
@@ -308,9 +317,12 @@
 
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/collection_img_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:layout_marginBottom="@dimen/smallMargin"
                     app:cardCornerRadius="20dp">
                     <ImageView
                         android:id="@+id/collection_img"
@@ -327,5 +339,16 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:elevation="30dp"
+        android:visibility="gone"
+        android:background="@drawable/progress_bar_background"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/black"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

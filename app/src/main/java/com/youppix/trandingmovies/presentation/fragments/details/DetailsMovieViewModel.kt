@@ -7,9 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.youppix.trandingmovies.data.remote.dto.MovieDetailsResponse
 import com.youppix.trandingmovies.domain.usecases.MoviesUseCases
+import com.youppix.trandingmovies.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,29 +19,40 @@ class DetailsMovieViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _movieDetails = MutableLiveData<MovieDetailsResponse>()
-    val movieDetails : LiveData<MovieDetailsResponse> = _movieDetails
+    val movieDetails: LiveData<MovieDetailsResponse> = _movieDetails
 
-    fun getMovieDetails(movieId : Int) = viewModelScope.launch {
-        try {
-            val response = moviesUseCases.getDetailsMovieUseCase(movieId)
-            if (response.isSuccessful){
-                response.body()?.let {
-                    _movieDetails.postValue(it)
-                }?: run {
-                    Log.d("MovieDetailsViewModel", "Response body is null")
+    val loading = MutableLiveData<Boolean>(false)
+
+    fun getMovieDetails(movieId: Int) {
+
+
+        moviesUseCases.getDetailsMovieUseCase(movieId).onEach { result ->
+
+            when (result) {
+                is Resource.Successful -> {
+                    result.data?.let {
+                        _movieDetails.postValue(it)
+                    }
                 }
-            } else {
-                Log.d("MovieDetailsViewModel", "Request failed with code: ${response.code()}")
-                Log.d("MovieDetailsViewModel", "Error body: ${response.errorBody()?.string()}")
+
+                is Resource.Loading -> {
+                    loading.postValue(true)
+                }
+
+                is Resource.Error -> {
+                    result.message?.let {
+                        Log.d("MovieDetailsViewModel", "${result.message}")
+                    } ?: {
+                        Log.d("MovieDetailsViewModel", "An unexpected error occurred")
+                    }
+
+                }
+
             }
-        } catch (e: HttpException) {
-            Log.d("MovieDetailsViewModel", "HttpException: ${e.message()}")
-        } catch (e: Exception) {
-            Log.d("MovieDetailsViewModel", "Exception: ${e.message}")
-        }
 
-
+        }.launchIn(viewModelScope)
     }
 
-
 }
+
+

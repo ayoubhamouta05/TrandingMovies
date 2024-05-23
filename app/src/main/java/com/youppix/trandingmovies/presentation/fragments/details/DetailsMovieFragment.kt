@@ -7,8 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,9 +19,7 @@ import com.youppix.trandingmovies.databinding.FragmentDetailsMovieBinding
 import com.youppix.trandingmovies.domain.model.Genre
 import com.youppix.trandingmovies.domain.model.ProductionCompany
 import com.youppix.trandingmovies.domain.model.SpokenLanguage
-import com.youppix.trandingmovies.presentation.activities.MainActivity
 import com.youppix.trandingmovies.presentation.adapters.ProductionAdapter
-import com.youppix.trandingmovies.util.Constant
 import com.youppix.trandingmovies.util.Constant.IMG_BASE_URL
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,54 +48,70 @@ class DetailsMovieFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("DetailsMovieFragment", viewModel.movieDetails.value.toString())
         binding.imgContainer.setBackgroundResource(R.drawable.trending_img_shape)
         binding.detailsContainer.setBackgroundResource(R.drawable.details_background)
         val movieId = args.movieId
         Log.d("DetailsMovieFragment", movieId.toString())
         viewModel.getMovieDetails(movieId)
 
+        viewModel.loading.observe(viewLifecycleOwner){
+            binding.progressBar.visibility = View.VISIBLE
+        }
+
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             setupUi(it)
         }
 
         binding.backBtn.setOnClickListener {
-            findNavController().navigate(R.id.TrendingMoviesFragment)
+            findNavController().popBackStack()
         }
 
     }
 
     private fun setupUi(movieDetails: MovieDetailsResponse) {
         binding.apply {
+            progressBar.visibility = View.GONE
             Glide.with(root).load("$IMG_BASE_URL${movieDetails.poster_path}").into(backdrop)
-            titleTextView.text = movieDetails.original_title
-            releaseDate.text = movieDetails.release_date
-            genresTv.text = getAllGenres(movieDetails.genres)
+            titleTextView.text = "${movieDetails.original_title}"
+            releaseDate.text ="${movieDetails.release_date}"
+            genresTv.text = getAllGenres(movieDetails.genres?: emptyList())
             linkBtn.setOnClickListener {
-                if (movieDetails.homepage.isNotEmpty()) {
+                if (movieDetails.homepage?.isNotEmpty() == true) {
                     val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(movieDetails.homepage))
                     startActivity(browserIntent)
                 }
 
             }
             ratingBar.apply {
-                rating = (movieDetails.vote_average / 2).toFloat()
+                rating = ((movieDetails.vote_average?.div(2) ?: (0))).toFloat()
             }
-            voteAverage.text = "${movieDetails.vote_average}/10"
-            voteCount.text = "(${movieDetails.vote_count})"
+            voteAverage.text = "${movieDetails.vote_average ?: ""}/10"
+            voteCount.text = "(${movieDetails.vote_count ?: ""})"
 
-            overviewText.text = movieDetails.overview
+            overviewText.text = movieDetails.overview ?: ""
 
-            originalLanguage.text =   movieDetails.original_language
+            originalLanguage.text =   movieDetails.original_language ?: ""
 
-            originCountries.text =   movieDetails.origin_country.joinToString("/")
+            originCountries.text =   "${movieDetails.origin_country?.joinToString(" / ")}"
 
-            setupProductionRv(movieDetails.production_companies)
+            setupProductionRv(movieDetails.production_companies ?: emptyList())
 
-            spokenLanguages.text = getAllSpokenLanguages(movieDetails.spoken_languages)
+            spokenLanguages.text = getAllSpokenLanguages(movieDetails.spoken_languages ?: emptyList())
 
-            collectionName.text = movieDetails.belongs_to_collection.name
+            collectionName.text = movieDetails.belongs_to_collection?.name ?: ""
 
-            Glide.with(root).load("$IMG_BASE_URL${movieDetails.belongs_to_collection.poster_path}").into(collectionImg)
+
+            movieDetails.belongs_to_collection?.let {
+                collectionName.text = it.name ?: ""
+                if (!it.poster_path.isNullOrEmpty()){
+                    binding.collectionImgContainer.visibility = View.VISIBLE
+                    Glide.with(root)
+                        .load("$IMG_BASE_URL${it.poster_path}")
+                        .into(collectionImg)
+                }
+
+            }
 
 
 
@@ -121,7 +133,7 @@ class DetailsMovieFragment : Fragment() {
             builder.append(i.name)
             builder.append("/")
         }
-        return builder.toString().dropLast(1)
+        return if(builder.isNotEmpty())builder.toString().dropLast(1) else ""
     }
 
     private fun setupProductionRv(list : List<ProductionCompany>) {

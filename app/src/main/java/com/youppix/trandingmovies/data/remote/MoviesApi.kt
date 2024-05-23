@@ -2,8 +2,6 @@ package com.youppix.trandingmovies.data.remote
 
 import com.youppix.trandingmovies.data.remote.dto.MovieDetailsResponse
 import com.youppix.trandingmovies.data.remote.dto.MoviesResponse
-import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
@@ -18,7 +16,7 @@ interface MoviesApi {
     @GET("discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc")
     suspend fun getTrendingMovies(
             @Query("page") page : Int
-    ): Response<MoviesResponse>
+    ): MoviesResponse
 
 
     @Headers(
@@ -29,7 +27,7 @@ interface MoviesApi {
     suspend fun getMovieById(
         @Path("movie_id") movieId: Int,
         @Query("language") language: String = "en-US"
-    ) : Response<MovieDetailsResponse>
+    ) : MovieDetailsResponse
 
 
 

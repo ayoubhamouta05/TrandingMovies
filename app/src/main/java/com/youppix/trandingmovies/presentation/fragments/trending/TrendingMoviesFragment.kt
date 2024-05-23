@@ -1,30 +1,25 @@
 package com.youppix.trandingmovies.presentation.fragments.trending
-
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.youppix.trandingmovies.R
 import com.youppix.trandingmovies.databinding.FragmentTrendingMoviesBinding
-import com.youppix.trandingmovies.presentation.activities.MainActivity
 import com.youppix.trandingmovies.presentation.adapters.TrendingMoviesAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class TrendingMoviesFragment : Fragment() {
 
     private lateinit var binding: FragmentTrendingMoviesBinding
-    private val viewModel by lazy {
-        (activity as MainActivity).viewModel
-    }
+    private val viewModel by viewModels<TrendingMoviesViewModel>()
+
 
     private val trendingMoviesAdapter by lazy {
         TrendingMoviesAdapter()
@@ -40,26 +35,27 @@ class TrendingMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (viewModel.trendingMovies.value?.results?.isEmpty() == true){
-            loading()
-        }
         setupRv()
 
-        binding.root.setOnClickListener {
-            findNavController().navigate(R.id.DetailsMovieFragment)
+        if (viewModel.trendingMovies.value == null){
+            viewModel.getMovies(page = 1)
+        }
+
+
+        viewModel.loading.observe(viewLifecycleOwner){
+            if (it){
+                loading()
+            }
         }
 
         viewModel.trendingMovies.observe(viewLifecycleOwner) {
-            trendingMoviesAdapter.differ.submitList(it.results)
-            if (it.results.isNotEmpty()){
-                lifecycleScope.launch {
-                    delay(1000)
-                    showRv()
-                    setupPagination(it.page,it.total_pages)
-                }
 
+            trendingMoviesAdapter.differ.submitList(it.results){
+                showRv()
+                setupPagination(it.page,it.total_pages)
+                Log.d("MainActivityy" , it.toString())
             }
+
         }
 
         trendingMoviesAdapter.setOnShowDetailsClickListener {
@@ -103,8 +99,6 @@ class TrendingMoviesFragment : Fragment() {
         }
 
     }
-
-
 
     private fun setupRv() {
         binding.trendingMoviesRv.apply {
