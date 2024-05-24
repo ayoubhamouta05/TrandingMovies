@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:rotation="180"
-                app:cardBackgroundColor="@color/body"
+                app:cardBackgroundColor="@color/text_title"
                 app:cardCornerRadius="@dimen/smallTextSize"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -126,7 +126,7 @@
                 android:id="@+id/next_page_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/body"
+                app:cardBackgroundColor="@color/text_title"
                 app:cardCornerRadius="@dimen/smallTextSize"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
