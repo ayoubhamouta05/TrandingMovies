@@ -22,6 +22,8 @@ class DetailsMovieViewModel @Inject constructor(
     val movieDetails: LiveData<MovieDetailsResponse> = _movieDetails
 
     val loading = MutableLiveData<Boolean>(false)
+    private val _error = MutableLiveData("")
+    val error : LiveData<String> = _error
 
     fun getMovieDetails(movieId: Int) {
 
@@ -32,6 +34,7 @@ class DetailsMovieViewModel @Inject constructor(
                 is Resource.Successful -> {
                     result.data?.let {
                         _movieDetails.postValue(it)
+                        _error.postValue(null)
                     }
                 }
 
@@ -41,8 +44,10 @@ class DetailsMovieViewModel @Inject constructor(
 
                 is Resource.Error -> {
                     result.message?.let {
+                        _error.postValue(result.message)
                         Log.d("MovieDetailsViewModel", "${result.message}")
                     } ?: {
+                        _error.postValue("An unexpected error occurred")
                         Log.d("MovieDetailsViewModel", "An unexpected error occurred")
                     }
 

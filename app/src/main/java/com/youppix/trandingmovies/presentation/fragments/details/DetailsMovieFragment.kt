@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -55,7 +56,7 @@ class DetailsMovieFragment : Fragment() {
         Log.d("DetailsMovieFragment", movieId.toString())
         viewModel.getMovieDetails(movieId)
 
-        viewModel.loading.observe(viewLifecycleOwner){
+        viewModel.loading.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.VISIBLE
         }
 
@@ -67,6 +68,16 @@ class DetailsMovieFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            if (!errorMessage.isNullOrEmpty())
+                onError(errorMessage)
+        }
+
+    }
+
+    private fun onError(errorMessage: String) {
+        findNavController().popBackStack()
+        Toast.makeText(requireContext(), errorMessage + "\nPlease Try Again", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupUi(movieDetails: MovieDetailsResponse) {
@@ -74,8 +85,8 @@ class DetailsMovieFragment : Fragment() {
             progressBar.visibility = View.GONE
             Glide.with(root).load("$IMG_BASE_URL${movieDetails.poster_path}").into(backdrop)
             titleTextView.text = "${movieDetails.original_title}"
-            releaseDate.text ="${movieDetails.release_date}"
-            genresTv.text = getAllGenres(movieDetails.genres?: emptyList())
+            releaseDate.text = "${movieDetails.release_date}"
+            genresTv.text = getAllGenres(movieDetails.genres ?: emptyList())
             linkBtn.setOnClickListener {
                 if (movieDetails.homepage?.isNotEmpty() == true) {
                     val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(movieDetails.homepage))
@@ -91,20 +102,21 @@ class DetailsMovieFragment : Fragment() {
 
             overviewText.text = movieDetails.overview ?: ""
 
-            originalLanguage.text =   movieDetails.original_language ?: ""
+            originalLanguage.text = movieDetails.original_language ?: ""
 
-            originCountries.text =   "${movieDetails.origin_country?.joinToString(" / ")}"
+            originCountries.text = "${movieDetails.origin_country?.joinToString(" / ")}"
 
             setupProductionRv(movieDetails.production_companies ?: emptyList())
 
-            spokenLanguages.text = getAllSpokenLanguages(movieDetails.spoken_languages ?: emptyList())
+            spokenLanguages.text =
+                getAllSpokenLanguages(movieDetails.spoken_languages ?: emptyList())
 
             collectionName.text = movieDetails.belongs_to_collection?.name ?: ""
 
 
             movieDetails.belongs_to_collection?.let {
                 collectionName.text = it.name ?: ""
-                if (!it.poster_path.isNullOrEmpty()){
+                if (!it.poster_path.isNullOrEmpty()) {
                     binding.collectionImgContainer.visibility = View.VISIBLE
                     Glide.with(root)
                         .load("$IMG_BASE_URL${it.poster_path}")
@@ -112,7 +124,6 @@ class DetailsMovieFragment : Fragment() {
                 }
 
             }
-
 
 
         }
@@ -133,10 +144,10 @@ class DetailsMovieFragment : Fragment() {
             builder.append(i.name)
             builder.append("/")
         }
-        return if(builder.isNotEmpty())builder.toString().dropLast(1) else ""
+        return if (builder.isNotEmpty()) builder.toString().dropLast(1) else ""
     }
 
-    private fun setupProductionRv(list : List<ProductionCompany>) {
+    private fun setupProductionRv(list: List<ProductionCompany>) {
         binding.productionRv.apply {
             adapter = productionAdapter
             layoutManager =

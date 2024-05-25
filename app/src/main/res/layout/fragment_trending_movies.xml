@@ -147,7 +147,40 @@
     </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <LinearLayout
+        android:id="@+id/error_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <ImageView
+            android:id="@+id/error_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_network_error"
+            android:layout_marginBottom="@dimen/mediumMargin"
+            android:scaleType="center"
+            app:tint="@color/placeholder"
+            />
 
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="@dimen/mediumMargin"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/placeholder"
+            android:textSize="@dimen/iconSize"
+            android:fontFamily="@font/poppins_regular"
+            android:layout_marginTop="@dimen/mediumMargin"
+            tools:text="error message"/>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

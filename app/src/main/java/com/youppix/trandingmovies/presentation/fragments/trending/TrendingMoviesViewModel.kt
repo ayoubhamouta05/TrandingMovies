@@ -24,8 +24,12 @@ class TrendingMoviesViewModel @Inject constructor(
     val trendingMovies: LiveData<MoviesResponse> = _trendingMovies
 
     private var _page = MutableLiveData<Int>(1)
+    val page :LiveData<Int> = _page
 
     val loading = MutableLiveData(false)
+
+    private val _error = MutableLiveData("")
+    val error : LiveData<String?> = _error
 
     fun getMovies(page : Int) {
         moviesUseCases.getTrendingMoviesUseCase(page).onEach { result->
@@ -36,12 +40,15 @@ class TrendingMoviesViewModel @Inject constructor(
                 is Resource.Successful -> {
                     result.data?.let {
                         _trendingMovies.postValue(it)
+                        _error.postValue(null)
                     }
                 }
                 is Resource.Error -> {
                     result.message?.let {
+                        _error.postValue(it)
                         Log.d("MovieDetailsViewModel", "${result.message}")
                     } ?: {
+                        _error.postValue("An unexpected error occurred")
                         Log.d("MovieDetailsViewModel", "An unexpected error occurred")
                     }
                 }

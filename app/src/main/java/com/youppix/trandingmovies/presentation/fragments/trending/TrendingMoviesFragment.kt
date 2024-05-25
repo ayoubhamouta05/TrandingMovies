@@ -1,17 +1,20 @@
 package com.youppix.trandingmovies.presentation.fragments.trending
+
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.youppix.trandingmovies.R
 import com.youppix.trandingmovies.databinding.FragmentTrendingMoviesBinding
 import com.youppix.trandingmovies.presentation.adapters.TrendingMoviesAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -37,23 +40,32 @@ class TrendingMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRv()
 
-        if (viewModel.trendingMovies.value == null){
+        if (viewModel.trendingMovies.value == null) {
             viewModel.getMovies(page = 1)
         }
 
 
-        viewModel.loading.observe(viewLifecycleOwner){
-            if (it){
+        viewModel.loading.observe(viewLifecycleOwner) {
+            if (it) {
                 loading()
             }
         }
 
+        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            if (!errorMessage.isNullOrEmpty())
+                onError(errorMessage)
+        }
+
+        binding.errorContainer.setOnClickListener {
+            onRefresh()
+        }
+
+
         viewModel.trendingMovies.observe(viewLifecycleOwner) {
 
-            trendingMoviesAdapter.differ.submitList(it.results){
+            trendingMoviesAdapter.differ.submitList(it.results) {
                 showRv()
-                setupPagination(it.page,it.total_pages)
-                Log.d("MainActivityy" , it.toString())
+                setupPagination(it.page, it.total_pages)
             }
 
         }
@@ -78,20 +90,19 @@ class TrendingMoviesFragment : Fragment() {
         }
 
 
-
     }
 
-    private fun setupPagination(currentPage : Int, totalPages : Int){
+    private fun setupPagination(currentPage: Int, totalPages: Int) {
         binding.apply {
             if (currentPage <= 1) {
                 previousPageBtn.visibility = View.GONE
-            }else{
+            } else {
                 previousPageBtn.visibility = View.VISIBLE
             }
 
-            if (currentPage == totalPages){
+            if (currentPage == totalPages) {
                 nextPageBtn.visibility = View.GONE
-            }else{
+            } else {
                 nextPageBtn.visibility = View.VISIBLE
             }
 
@@ -112,14 +123,33 @@ class TrendingMoviesFragment : Fragment() {
         binding.shimmerLayout.visibility = View.GONE
         binding.trendingMoviesRv.visibility = View.VISIBLE
         binding.pageInfoContainer.visibility = View.VISIBLE
+        binding.errorContainer.visibility = View.GONE
     }
 
-    private fun loading(){
+    private fun loading() {
         binding.shimmerLayout.startShimmer()
         binding.shimmerLayout.visibility = View.VISIBLE
         binding.trendingMoviesRv.visibility = View.GONE
         binding.pageInfoContainer.visibility = View.GONE
+        binding.errorContainer.visibility = View.GONE
 
+    }
+
+    private fun onError(errorMessage: String) {
+        lifecycleScope.launch {
+            delay(300)
+            binding.shimmerLayout.stopShimmer()
+            binding.shimmerLayout.visibility = View.GONE
+            binding.trendingMoviesRv.visibility = View.GONE
+            binding.pageInfoContainer.visibility = View.GONE
+            binding.errorContainer.visibility = View.VISIBLE
+            binding.errorMessage.text = "$errorMessage \n Click To Refresh"
+        }
+
+    }
+
+    private fun onRefresh() {
+        viewModel.getMovies(viewModel.page.value ?: 1)
     }
 
 
